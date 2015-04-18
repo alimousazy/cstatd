@@ -1,0 +1,15 @@
+syntax = "proto2";
+
+package cstatd;
+
+message Point {
+  optional int64 timestamp = 1;   
+  optional string name = 2;        
+  optional double value = 3;        
+  map<string, string> tags = 4;
+  enum Type {
+      GAUGE = 0; // Not Supported
+      COUNTER = 1;
+      SET = 2; // Not Supported
+  };
+}
