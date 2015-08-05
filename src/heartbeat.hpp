@@ -3,16 +3,16 @@
 
 #pragma once
 
-class Metric {
+class Heartbeat {
     private:
-        static Metric self;
+        static Heartbeat self;
     public:
         std::atomic_llong recived;
         std::atomic_llong processed;
         std::atomic_llong pushed;
-        static Metric& getMetric() 
+        static Heartbeat& getHeartbeat() 
         {
-            return self;
+					return self;
         }
         void dump() 
         {

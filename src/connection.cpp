@@ -27,29 +27,34 @@ void tcp_connection::start()
     do_read();
 }
 size_t tcp_connection::read_complete(const boost::system::error_code & err, size_t bytes) {
-        if ( err) return 0;
-        int found;
-        long size = 1;
-        if(bytes <= 3)
-        {
-            char *end_ptr;
-            long size = strtol(message_, &end_ptr, 10);
-            if(size != 0 && *end_ptr != '\0')
-            {
-                return size;
-            }
-        }
-        else {
-            size = 0;
-        }
-        return size;
+	if (err) 
+		return 0;
+	long size = 1;
+	if(strstr(message_, "-"))
+	{
+		char *end_ptr;
+		size = strtol(message_, &end_ptr, 10);
+		if(size == 0 && *end_ptr == '\0')
+		{
+			size = 1;
+		}
+	}
+	if(bytes > 3)
+	{
+		size = 0;
+	}
+	return size;
 }
 
 void  tcp_connection::handle_read(const boost::system::error_code& error, size_t bytes_transferred)
 {
     if(error)
         return;
-    c_queue->push(message_);
-    do_read();
+	char *pos = strstr(message_, "-");
+	if(pos && *++pos)
+	{
+	  c_queue->push(pos);
+	}
+	do_read();
 }
 

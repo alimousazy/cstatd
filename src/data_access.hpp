@@ -5,6 +5,8 @@
 #include <rocksdb/env.h>
 #include <rocksdb/merge_operator.h>
 #include <rocksdb/utilities/json_document.h>
+#include <rocksdb/utilities/db_ttl.h>
+
 
 #pragma once
 
@@ -13,8 +15,10 @@ class data_access {
     public:
     data_access ();     
     void add(std::string key, uint64_t value); 
+		rocksdb::Snapshot const * GetSnapshot();
     uint64_t get(std::string &key); 
-    private:
+		rocksdb::Iterator* NewIterator(rocksdb::ReadOptions rOptions);
+		void ReleaseSnapshot(rocksdb::Snapshot const *snp);
     struct encoder {
         static void encode(std::string &str, uint64_t num)
         {
@@ -29,6 +33,7 @@ class data_access {
            return result;
         }
     };
+    private:
     class UInt64AddOperator : public AssociativeMergeOperator {
      public:
       virtual bool Merge(

@@ -10,7 +10,7 @@ data_access::data_access()
     op.merge_operator.reset(new UInt64AddOperator());
     op.env = env;
     op.create_if_missing = true;
-    Status stats = DB::Open(op, "/tmp/mak", &dbp);
+    Status stats = rocksdb::DBWithTTL::Open(op, "/tmp/mak", &dbp, 120);
     if(!stats.ok())
     {
         std::cerr<<"Can't access DB"<<std::endl;
@@ -29,3 +29,17 @@ uint64_t data_access::get(std::string &key)
     sDptr->Get(rocksdb::ReadOptions(),key, &v);
     return encoder::decode(v.c_str());
 }
+rocksdb::Snapshot const * data_access::GetSnapshot()
+{
+	return sDptr->GetSnapshot();
+}
+
+rocksdb::Iterator* data_access::NewIterator(rocksdb::ReadOptions rOptions)
+{
+	return sDptr->NewIterator(rOptions);
+}
+void data_access::ReleaseSnapshot(rocksdb::Snapshot const *snp)
+{
+	sDptr->ReleaseSnapshot(snp);
+}
+
