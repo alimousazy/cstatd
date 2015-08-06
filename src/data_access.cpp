@@ -2,7 +2,7 @@
 
 data_access::data_access() 
 {
-    DB* dbp;
+    DBWithTTL* dbp;
     Options op;
     auto env = rocksdb::Env::Default();
     env->SetBackgroundThreads(2, rocksdb::Env::LOW);

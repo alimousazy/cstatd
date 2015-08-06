@@ -1,6 +1,5 @@
 #include "server.hpp"
 
-#pragma once
 
 using boost::asio::ip::tcp;
 

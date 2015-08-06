@@ -62,15 +62,15 @@ class data_access {
 
     class MergeBasedCounters {
          public:
-          MergeBasedCounters(std::shared_ptr<DB> db) : db_(db) {}
+          MergeBasedCounters(std::shared_ptr<DBWithTTL> db) : db_(db) {}
           virtual void Add(const std::string& key, uint64_t value)  {
               std::string serialized;
               encoder::encode(serialized, value);
               db_->Merge(rocksdb::WriteOptions(), key, serialized);
           }
          private:
-          std::shared_ptr<DB> db_;
+          std::shared_ptr<DBWithTTL> db_;
     };
-    shared_ptr<DB> sDptr;
+    shared_ptr<DBWithTTL> sDptr;
     shared_ptr<MergeBasedCounters> mergeBaseCount;
 };
