@@ -48,11 +48,12 @@ size_t tcp_connection::read_complete(const boost::system::error_code & err, size
 
 void  tcp_connection::handle_read(const boost::system::error_code& error, size_t bytes_transferred)
 {
-    if(error)
-        return;
+	if(error)
+		return;
 	char *pos = strstr(message_, "-");
 	if(pos && *++pos)
 	{
+		Heartbeat::pushed++;
 	  c_queue->push(pos);
 	}
 	do_read();

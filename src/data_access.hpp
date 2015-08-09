@@ -15,10 +15,11 @@ class data_access {
     public:
     data_access ();     
     void add(std::string key, uint64_t value); 
-		rocksdb::Snapshot const * GetSnapshot();
+    void delete_key(std::string &key); 
+	rocksdb::Snapshot const * GetSnapshot();
     uint64_t get(std::string &key); 
-		rocksdb::Iterator* NewIterator(rocksdb::ReadOptions rOptions);
-		void ReleaseSnapshot(rocksdb::Snapshot const *snp);
+	rocksdb::Iterator* NewIterator(rocksdb::ReadOptions rOptions);
+	void ReleaseSnapshot(rocksdb::Snapshot const *snp);
     struct encoder {
         static void encode(std::string &str, uint64_t num)
         {

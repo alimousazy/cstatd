@@ -5,6 +5,7 @@ data_access::data_access()
     DBWithTTL* dbp;
     Options op;
     auto env = rocksdb::Env::Default();
+	op.compaction_style  = rocksdb::kCompactionStyleUniversal; 
     env->SetBackgroundThreads(2, rocksdb::Env::LOW);
     env->SetBackgroundThreads(1, rocksdb::Env::HIGH);
     op.merge_operator.reset(new UInt64AddOperator());
@@ -22,6 +23,10 @@ data_access::data_access()
 void data_access::add(std::string key, uint64_t value) 
 {
     mergeBaseCount->Add(key, value);
+} 
+void data_access::delete_key(std::string &key) 
+{
+    sDptr->Delete(rocksdb::WriteOptions(), key);
 } 
 uint64_t data_access::get(std::string &key) 
 {

@@ -7,6 +7,7 @@
 #include <cstring>
 #include <cstdlib>
 #include <vector>
+#include "heartbeat.hpp"
 #include "c_queue.cpp"
 #include "scatter.hpp"
 #define BUFFER_SIZE 1024
