@@ -26,6 +26,7 @@ public:
   void start();
   tcp_connection(boost::asio::io_service& io_service, scatter<std::string>* queue);
   std::string msg[2];
+	~tcp_connection();
 
 private:
   scatter<std::string> *c_queue;

@@ -5,7 +5,7 @@ data_access::data_access()
     DBWithTTL* dbp;
     Options op;
     auto env = rocksdb::Env::Default();
-	op.compaction_style  = rocksdb::kCompactionStyleUniversal; 
+		op.compaction_style  = rocksdb::kCompactionStyleUniversal; 
     env->SetBackgroundThreads(2, rocksdb::Env::LOW);
     env->SetBackgroundThreads(1, rocksdb::Env::HIGH);
     op.merge_operator.reset(new UInt64AddOperator());

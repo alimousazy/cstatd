@@ -16,6 +16,7 @@ extern "C" {
 #include <lauxlib.h>
 #include <lualib.h>
 }
+#include<time.h>
 
 #include "scatter.hpp"
 #include "server.hpp"
@@ -35,13 +36,12 @@ void snap_shot(data_access &dAccess)
 	{
         fprintf(stderr, "Lua script has an issue: %s\n", lua_tostring(L, -1));
 	}    
-	std::chrono::seconds dur(60);
 	while(true) 
 	{
 		
 		auto start = std::chrono::high_resolution_clock::now();
 		rocksdb::ReadOptions readOptions;
-	  	readOptions.snapshot = dAccess.GetSnapshot();
+		readOptions.snapshot = dAccess.GetSnapshot();
 		auto* snapshotIterator = dAccess.NewIterator(readOptions);
 		Heartbeat::dump();
 		for(snapshotIterator->SeekToFirst(); snapshotIterator->Valid(); snapshotIterator->Next()) 
@@ -58,7 +58,14 @@ void snap_shot(data_access &dAccess)
 		}
 		dAccess.ReleaseSnapshot(readOptions.snapshot);
 		delete snapshotIterator;
-	    std::this_thread::sleep_for(dur);
+		/* should moved to function */
+		time_t current;
+		struct tm * ptm;
+		time(&current);
+		/*Not thread safe should be replaced with gmtime_r*/
+    ptm = gmtime(&current);
+		std::chrono::seconds dur(61 - ptm->tm_sec);
+		std::this_thread::sleep_for(dur);
 	}
 }
 

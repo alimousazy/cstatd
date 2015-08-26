@@ -1,6 +1,14 @@
 #include "connection.hpp"
 
-tcp_connection::tcp_connection(boost::asio::io_service& io_service, scatter<std::string> *queue) : socket_(io_service), c_queue(queue){};
+tcp_connection::tcp_connection(boost::asio::io_service& io_service, scatter<std::string> *queue) : socket_(io_service), c_queue(queue)
+{
+	Heartbeat::recived++;
+};
+
+tcp_connection::~tcp_connection()
+{
+	Heartbeat::recived--;
+};
 
 tcp_connection::pointer tcp_connection::create(boost::asio::io_service& io_service, scatter<std::string> *queue)
 {
